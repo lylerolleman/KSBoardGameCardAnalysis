@@ -1,0 +1,9 @@
+﻿@{
+    var db = Database.Open("card_db");
+    var id_query = "SELECT MAX(id) FROM contract_deck";
+    var id = db.QueryValue(id_query) + 1;
+    var insert_query = "INSERT INTO contract_deck(id, name, date_modified) VALUES(@0, @1, GETDATE())";
+    db.Execute(insert_query, id, Request.Form["deck_name"]);
+    Response.Redirect("/DeckManagement/deck_manage.cshtml?deck_id=" + id);
+}
+

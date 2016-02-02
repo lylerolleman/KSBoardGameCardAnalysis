@@ -1,0 +1,75 @@
+﻿@{
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Card Creation</title>
+        <link rel="stylesheet" type="text/css" href="/Shared/deck_table.css">
+        <style>
+            label {
+                text-align: left;
+                width: 125px;
+                float: left;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    </head>
+    <body>
+        @RenderPage("/Shared/header.cshtml")
+        <form id="card_form" action="/DBAjax/card_insert.cshtml" method="POST">
+            <label for="name_field">Name: </label><input id="name_field" name="name_field" type="text"><br>
+            <label for="type_field">Type: </label><select id="type_field" name="type">
+                <option value="EASY">EASY</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="HARD">HARD</option>
+            </select>
+            <br>
+            <label for="fund_reward">Fund Reward: </label><input id="fund_reward" name="fund_reward" type="text"><br>
+            <label for="fuel_reward">Fuel Reward: </label><input id="fuel_reward" name="fuel_reward" type="text"><br>
+            <label for="science_reward">Science Reward: </label><input id="science_reward" name="science_reward" type="text"><br>
+            <label for="fund_cost">Fund Cost: </label><input id="fund_cost" name="fund_cost" type="text"><br>
+            <label for="fuel_cost">Fuel Cost: </label><input id="fuel_cost" name="fuel_cost" type="text"><br>
+            <label for="science_cost">Science Cost: </label><input id="science_cost" name="science_cost" type="text"><br>
+            <input type="submit">
+        </form>
+        <br>
+        <div id="search_table"></div>
+        
+        <script>
+            $(document).ready(function () {
+                $("#card_form").on('change input', function () {
+                    var name = $("#name_field").val();
+                    $("#search_table").load("/DBAjax/card_search.cshtml?name=" + name);
+                });
+            });
+            $(document).ready(function () {
+                $(document).on("click", "tr", function () {
+                    var name_obj = $(this).children().next();
+                    $("#name_field").val(name_obj.html());
+                    var fund_reward = name_obj.next();
+                    var fuel_reward = fund_reward.next();
+                    var science_reward = fuel_reward.next();
+                    var fund_cost = science_reward.next();
+                    var fuel_cost = fund_cost.next();
+                    var science_cost = fuel_cost.next();
+                    var category = science_cost.next();
+                    $("#type_field").val(category.html());
+                    $("#fund_reward").val(fund_reward.html());
+                    $("#fuel_reward").val(fuel_reward.html());
+                    $("#science_reward").val(science_reward.html());
+                    $("#fund_cost").val(fund_cost.html());
+                    $("#fuel_cost").val(fuel_cost.html());
+                    $("#science_cost").val(science_cost.html());
+
+                    var name = $("#name_field").val();
+                    $("#search_table").load("/DBAjax/card_search.cshtml?name=" + name);
+                });
+            });
+        </script>
+        
+    </body>
+</html>

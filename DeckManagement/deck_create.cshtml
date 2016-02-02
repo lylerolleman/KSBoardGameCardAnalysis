@@ -1,0 +1,21 @@
+﻿@{
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Create New Deck</title>
+    </head>
+    <body>
+        @RenderPage("/Shared/header.cshtml")
+        <form action="/DBAjax/deck_insert.cshtml" method="POST">
+            <label for="deck_name">New Deck Name: </label>
+            <input id="deck_name" name="deck_name" type="text"><br>
+            <input type="submit">
+        </form>
+        
+    </body>
+</html>

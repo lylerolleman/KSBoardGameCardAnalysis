@@ -1,0 +1,22 @@
+﻿@{
+    Validation.RequireFields("name_field", "fund_reward", "fuel_reward", "science_reward",
+        "fund_cost", "fuel_cost", "science_cost", "type");
+    if (IsPost && Validation.IsValid()) {
+        var db = Database.Open("card_db");
+        var id_query = "SELECT MAX(cid) FROM card";
+        var id = db.QueryValue(id_query) + 1;
+        var query = "INSERT INTO card(cid, name, fund_reward, fuel_reward, science_reward, " +
+            "fund_cost, fuel_cost, science_cost, category) " + 
+            "VALUES(@0, @1, @2, @3, @4, @5, @6, @7, @8)";
+        db.Execute(query, id, Request.Form["name_field"], Request.Form["fund_reward"], Request.Form["fuel_reward"], Request.Form["science_reward"],
+            Request.Form["fund_cost"], Request.Form["fuel_cost"], Request.Form["science_cost"], Request.Form["type"]);
+        Response.Redirect("/Views/card_list.cshtml");
+    } else {
+        if (!Validation.IsValid()) {
+            Response.Write("Error in validation");
+        } else {
+            Response.Write("Post error");
+        }
+    }
+}
+

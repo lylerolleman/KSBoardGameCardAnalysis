@@ -1,0 +1,73 @@
+﻿@{
+    var id = Request["deck_id"];
+    var db = Database.Open("card_db");
+    var deck_query = "SELECT cid AS [Card ID], name AS Name, category AS Category, fund_reward AS [Fund Reward], " +
+        "fuel_reward AS [Fuel Reward], science_reward AS [Science Reward] " +
+        "FROM card WHERE cid IN (SELECT card_id FROM deck_cards WHERE deck_id = " + id + ")";
+    var card_query = "SELECT cid AS [Card ID], name AS Name, category AS Category, fund_reward AS [Fund Reward], " +
+        "fuel_reward AS [Fuel Reward], science_reward AS [Science Reward] " +
+        "FROM card";
+    var deck_data = db.Query(deck_query); 
+    var card_data = db.Query(card_query);
+    var name_query = "SELECT name FROM contract_deck WHERE id = " + id;
+    var name = db.QueryValue(name_query);
+    var deck_grid = new WebGrid(deck_data); 
+    var card_grid = new WebGrid(card_data);
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Manage @name</title>
+        <link rel="stylesheet" type="text/css" href="/Shared/deck_table.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <style>
+            #deck_list {
+                float: left;
+            }
+            #card_list {
+                float: left;
+            }
+            table {
+                width: 90%
+            }
+        </style>
+    </head>
+    <body>
+        @RenderPage("/Shared/header.cshtml")
+        <button id="done_button">Done</button>
+        <br>
+        <div id="deck_list">
+            <p>Cards in @name</p>
+            @deck_grid.GetHtml()
+        </div>
+        <div id="card_list">
+            <p>All cards</p>
+            @card_grid.GetHtml()
+        </div>
+        
+        
+        <script>
+            $(document).ready(function () {
+                $(document).on("click", "#deck_list tr", function () {
+                    var cid = $(this).children().first().html();
+                    var did = @id;
+                    $.post("/DBAjax/card_unsub.cshtml", {cid:cid, did:did});
+                    $(this).remove();
+                });
+                $(document).on("click", "#card_list tr", function () {
+                    var cid = $(this).children().first().html();
+                    var did = @id;
+                    $.post("/DBAjax/card_sub.cshtml", {cid:cid, did:did});
+                    $("#deck_list tbody").append("<tr>" + $(this).html() + "</tr>");
+                });
+                $("#done_button").click(function() {
+                    var did = @id;
+                    window.location.replace("/Views/display_deck.cshtml?deck_id=" + did);
+                });
+            });
+        </script>
+    </body>
+</html>

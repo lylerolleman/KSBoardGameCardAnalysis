@@ -1,0 +1,29 @@
+﻿@{
+    var db = Database.Open("card_db");
+    var query = "SELECT id, name FROM contract_deck";
+    var data = db.Query(query); 
+}
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Card Analysis Index</title>
+    </head>
+    <body>
+        @RenderPage("/Shared/header.cshtml")
+        <form action="Views/display_deck.cshtml" method="POST">
+            View Deck: 
+            <select name="deck_id">
+                @foreach (var row in data)
+                {
+                    <option value="@row.id">@row.name</option>
+                }
+            </select>
+            <input type="submit">
+        </form>
+        <br>
+        <a href="Views/card_list.cshtml">View List of Cards</a>
+        <a href="DeckManagement/deck_create.cshtml">Create New Deck</a>
+    </body>
+</html>

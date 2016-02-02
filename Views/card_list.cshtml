@@ -1,0 +1,35 @@
+﻿@{
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Card List</title>
+        <link rel="stylesheet" type="text/css" href="/Shared/deck_table.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#add_card").click(function () {
+                    window.location.replace("/CardManagement/card_create.cshtml");
+                });
+                $("#remove_cards").click(function () {
+                    window.location.replace("/CardManagement/card_remove.cshtml");
+                });
+            });
+        </script>
+    </head>
+    <body>
+        @RenderPage("/Shared/header.cshtml")
+        <button id="add_card">Add New Card</button><br>
+        <button id="remove_cards">Remove Cards</button><br><br>
+        <div id="card_list"></div>
+        <script>
+            $(document).ready(function () {
+                $("#card_list").load("/DBAjax/card_list_ajax.cshtml");
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,7 @@
+﻿@{
+    var id = Request.Form["cid"];
+    var db = Database.Open("card_db");
+    var query = "DELETE FROM card WHERE cid = " + id;
+    db.Execute(query);
+}
+

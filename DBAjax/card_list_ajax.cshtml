@@ -1,0 +1,9 @@
+﻿@{
+    var db = Database.Open("card_db");
+    var query = "SELECT cid AS [Card ID], name AS Name, category AS Category, fund_reward AS [Fund Reward], " +
+        "fuel_reward AS [Fuel Reward], science_reward AS [Science Reward] " +
+        "FROM card";
+    var data = db.Query(query); 
+    var grid = new WebGrid(data); 
+}
+@grid.GetHtml()

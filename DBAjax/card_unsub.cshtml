@@ -1,0 +1,8 @@
+﻿@{
+    var cid = Request.Form["cid"];
+    var did = Request.Form["did"];
+    var db = Database.Open("card_db");
+    var query = "DELETE FROM deck_cards WHERE deck_id = @0 AND card_id = @1";
+    db.Execute(query, did, cid);
+}
+

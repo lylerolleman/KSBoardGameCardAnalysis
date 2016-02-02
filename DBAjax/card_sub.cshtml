@@ -1,0 +1,9 @@
+﻿@{
+    var cid = Request.Form["cid"];
+    var did = Request.Form["did"];
+    var db = Database.Open("card_db");
+    var query = "INSERT INTO deck_cards(deck_id, card_id) VALUES(@0, @1)";
+    db.Execute(query, did, cid);
+}
+
+

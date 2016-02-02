@@ -1,0 +1,36 @@
+﻿@{
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Remove Cards</title>
+        <link rel="stylesheet" type="text/css" href="/Shared/deck_table.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#done").click(function () {
+                    window.location.replace("/Views/card_list.cshtml");
+                });
+            });
+        </script>
+    </head>
+    <body>
+        @RenderPage("/Shared/header.cshtml")
+        <button id="done">Done</button><br><br>
+        <div id="card_list"></div>
+        <script>
+            $(document).ready(function () {
+                $("#card_list").load("/DBAjax/card_list_ajax.cshtml");
+                $(document).on("click", "tr", function () {
+                    var id = $(this).children().first().html();
+                    $.post("/DBAjax/card_remove_db.cshtml", { cid: id });
+                    $(this).remove();
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+﻿@{
+    var id = Request["deck_id"];
+    var db = Database.Open("card_db");
+    var query = "SELECT name AS Name, category AS Category, fund_reward AS [Fund Reward], " +
+        "fuel_reward AS [Fuel Reward], science_reward AS [Science Reward] " +
+        "FROM card WHERE cid IN (SELECT card_id FROM deck_cards WHERE deck_id = " + id + ")";
+    var data = db.Query(query); 
+    query = "SELECT name FROM contract_deck WHERE id = " + id;
+    var name = db.QueryValue(query);
+    var grid = new WebGrid(data); 
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Deck @name</title>
+        <link rel="stylesheet" type="text/css" href="/Shared/deck_table.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#manage_deck").click(function () {
+                    window.location.replace("/DeckManagement/deck_manage.cshtml?deck_id=" + @id);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        @RenderPage("/Shared/header.cshtml")
+        <p>Deck: @name</p>
+        <button id="manage_deck">Manage Deck</button>
+        @grid.GetHtml()
+    </body>
+</html>
